@@ -1,6 +1,8 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import {format} from "timeago.js"
 
 const Container = styled.div`
   width: ${(props)=> props.type !== "sm" && "360px" };
@@ -48,18 +50,31 @@ const Info = styled.div`
   color: ${({ theme }) => theme.textSoft};
 `
 
-const Card = ({type}) => {
+const Card = ({type, video}) => {
+
+  const [channel,setChannel] = useState({})
+
+  useEffect(()=>{
+    const fetchChannel = async ()=>{
+      const res = await axios.get(`/users/find/${video.userId}`)
+      setChannel(res.data)
+    }
+    fetchChannel()
+  },[video.userId])
+
   return (
     <Container type={type}>
       <Link to="/video/test" style={{textDecoration: "none"}}>
-        <Image type={type} src="https://img.youtube.com/vi/k3Vfj-e1Ma4/sddefault.jpg" />
+        <Image type={type} src={video.imgUrl} />
+        {/* https://img.youtube.com/vi/k3Vfj-e1Ma4/sddefault.jpg */}
       </Link>
       <Details type={type}>
-        <ChannelImage type={type} src='https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg' />
+        <ChannelImage type={type} src={channel.img} />
+        {/* https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg */}
         <Texts>
-          <Title>Test Video</Title>
-          <ChannelName>Test Dev</ChannelName>
-          <Info>660,908 views • 1 day ago</Info>
+          <Title>{video.title}</Title>
+          <ChannelName>{channel.name}</ChannelName>
+          <Info>{video.views} views • {format(video.createdAt)}</Info>
         </Texts>
       </Details>
     </Container>
