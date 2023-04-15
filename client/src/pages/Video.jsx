@@ -1,4 +1,4 @@
-import { AddTaskOutlined, ReplyOutlined, ThumbDownOffAltOutlined, ThumbUpOutlined } from '@mui/icons-material'
+import { AddTaskOutlined, ReplyOutlined, ThumbDown, ThumbDownOffAltOutlined, ThumbUp, ThumbUpOutlined } from '@mui/icons-material'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Comments from '../components/Comments'
@@ -114,7 +114,16 @@ const Video = () => {
       } catch (err) { }
     };
     fetchData();
-  }, [path,dispatch]);
+  }, [path, dispatch]);
+
+  const handleLike = async ()=>{
+    await axios.put(`/users/like/${currentVideo?._id}`)
+    dispatch(like(currentUser._id))
+  }
+  const handleDislike = async ()=>{
+    await axios.put(`/users/dislike/${currentVideo?._id}`)
+    dispatch(dislike(currentUser._id))
+  }
 
   return (
     <Container>
@@ -134,8 +143,8 @@ const Video = () => {
         <Details>
           <Info>{currentVideo?.views} views • {format(currentVideo?.createdAt)}</Info>
           <Buttons>
-            <Button><ThumbUpOutlined />{currentVideo?.likes?.length}</Button>
-            <Button><ThumbDownOffAltOutlined />Dislike</Button>
+            <Button onClick={handleLike}>{currentVideo?.likes?.includes(currentUser._id) ? <ThumbUp /> : <ThumbUpOutlined />}{currentVideo?.likes?.length}</Button>
+            <Button onClick={handleDislike}>{currentVideo?.dislikes?.includes(currentUser._id) ? <ThumbDown /> : <ThumbDownOffAltOutlined />}Dislike</Button>
             <Button><ReplyOutlined />Share</Button>
             <Button><AddTaskOutlined />Save</Button>
           </Buttons>
