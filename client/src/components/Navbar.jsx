@@ -1,5 +1,5 @@
 import { AccountCircleOutlined, SearchOutlined, VideoCallOutlined } from "@mui/icons-material"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import { useSelector } from 'react-redux'
 import { useState } from "react"
@@ -31,10 +31,13 @@ const Search = styled.div`
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 3px;
+  color: ${({ theme }) => theme.text};
 `
 const Input = styled.input`
   border: none;
   background-color: transparent;
+  outline: none;
+  color: ${({ theme }) => theme.text};
 `
 const SearchIcon = styled.div`
   color: ${({ theme }) => theme.text};
@@ -67,7 +70,9 @@ const Avatar = styled.img`
 
 
 const Navbar = () => {
+  const navigate = useNavigate()
   const [open, setOpen] = useState(false)
+  const [q, setQ] = useState("")
   const { currentUser } = useSelector(state => state.user)
 
   return (
@@ -75,9 +80,9 @@ const Navbar = () => {
       <Container>
         <Wrapper>
           <Search>
-            <Input placeholder="Search" />
+            <Input placeholder="Search" onChange={e=>setQ(e.target.value)}/>
             <SearchIcon>
-              <SearchOutlined />
+              <SearchOutlined onClick={()=>navigate(`/search?q=${q}`)}/>
             </SearchIcon>
           </Search>
           {currentUser ? (
