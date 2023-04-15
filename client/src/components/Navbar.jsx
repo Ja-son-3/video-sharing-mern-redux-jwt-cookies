@@ -2,6 +2,8 @@ import { AccountCircleOutlined, SearchOutlined, VideoCallOutlined } from "@mui/i
 import { Link } from "react-router-dom"
 import styled from "styled-components"
 import { useSelector } from 'react-redux'
+import { useState } from "react"
+import Upload from "./Upload";
 
 const Container = styled.div`
   position: sticky;
@@ -65,32 +67,35 @@ const Avatar = styled.img`
 
 
 const Navbar = () => {
-
+  const [open, setOpen] = useState(false)
   const { currentUser } = useSelector(state => state.user)
 
   return (
-    <Container>
-      <Wrapper>
-        <Search>
-          <Input placeholder="Search" />
-          <SearchIcon>
-            <SearchOutlined />
-          </SearchIcon>
-        </Search>
-        {currentUser ? (
-          <User>
-            <VideoCallOutlined />
-            <Avatar src={currentUser.img}/>
-            {currentUser.name}
-          </User>
-        ) : <Link to="signin" style={{ textDecoration: "none" }}>
-          <Button>
-            <AccountCircleOutlined />
-            SIGN IN
-          </Button>
-        </Link>}
-      </Wrapper>
-    </Container>
+    <>
+      <Container>
+        <Wrapper>
+          <Search>
+            <Input placeholder="Search" />
+            <SearchIcon>
+              <SearchOutlined />
+            </SearchIcon>
+          </Search>
+          {currentUser ? (
+            <User>
+              <VideoCallOutlined onClick={() => setOpen(true)} />
+              <Avatar src={currentUser.img} />
+              {currentUser.name}
+            </User>
+          ) : <Link to="signin" style={{ textDecoration: "none" }}>
+            <Button>
+              <AccountCircleOutlined />
+              SIGN IN
+            </Button>
+          </Link>}
+        </Wrapper>
+      </Container>
+      {open && <Upload setOpen={setOpen} />}
+    </>
   )
 }
 
