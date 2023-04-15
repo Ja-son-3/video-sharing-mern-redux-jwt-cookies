@@ -2,6 +2,7 @@ import styled from "styled-components"
 import LogoImg from "../img/logo.png"
 import { AccountCircleOutlined, ArticleOutlined, ExploreOutlined, FlagOutlined, HelpOutlineOutlined, HistoryOutlined, Home, LibraryMusicOutlined, LiveTvOutlined, MovieOutlined, SettingsBrightnessOutlined, SettingsOutlined, SportsBasketballOutlined, SportsEsportsOutlined, SubscriptionsOutlined, VideoLibraryOutlined } from "@mui/icons-material"
 import { Link } from "react-router-dom"
+import { useSelector } from "react-redux"
 
 
 const Container = styled.div`
@@ -66,6 +67,9 @@ const Title = styled.h2`
 `
 
 const Menu = ({ setDarkMode, darkMode }) => {
+
+  const { currentUser } = useSelector(state => state.user)
+
   return (
     <Container>
       <Wrapper>
@@ -79,13 +83,13 @@ const Menu = ({ setDarkMode, darkMode }) => {
           <Home />
           Home
         </Item>
-        <Link to="trends" style={{ textDecoration: "none", color:"inherit" }}>
+        <Link to="trends" style={{ textDecoration: "none", color: "inherit" }}>
           <Item>
             <ExploreOutlined />
             Explore
           </Item>
         </Link>
-        <Link to="subscriptions" style={{ textDecoration: "none", color:"inherit" }}>
+        <Link to="subscriptions" style={{ textDecoration: "none", color: "inherit" }}>
           <Item>
             <SubscriptionsOutlined />
             Subscriptions
@@ -101,13 +105,17 @@ const Menu = ({ setDarkMode, darkMode }) => {
           History
         </Item>
         <Hr />
-        <Login>
-          Sign in to like videos, comment, and subscribe.
-          <Link to="signin" style={{ textDecoration: "none" }}>
-            <Button><AccountCircleOutlined />SIGN IN</Button>
-          </Link>
-        </Login>
-        <Hr />
+        {!currentUser &&
+          <>
+            <Login>
+              Sign in to like videos, comment, and subscribe.
+              <Link to="signin" style={{ textDecoration: "none" }}>
+                <Button><AccountCircleOutlined />SIGN IN</Button>
+              </Link>
+            </Login>
+            <Hr />
+          </>
+        }
         <Title>Best of VideoTube</Title>
         <Item>
           <LibraryMusicOutlined />
