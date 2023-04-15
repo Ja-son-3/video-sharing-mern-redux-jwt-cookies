@@ -97,29 +97,24 @@ const Subcribe = styled.button`
 
 const Video = () => {
   const { currentUser } = useSelector((state) => state.user);
-  // const { currentVideo } = useSelector((state) => state.video);
+  const { currentVideo } = useSelector((state) => state.video);
   const dispatch = useDispatch();
 
-  const path = useLocation()
+  const path = useLocation().pathname.split("/")[2]
 
-  console.log(path)
-  //.pathname.split("/")[2]
+  const [channel, setChannel] = useState({});
 
-  // const [channel, setChannel] = useState({});
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const videoRes = await axios.get(`/videos/find/${path}`);
-  //       const channelRes = await axios.get(
-  //         `/users/find/${videoRes.data.userId}`
-  //       );
-  //       setChannel(channelRes.data);
-  //       dispatch(fetchSuccess(videoRes.data));
-  //     } catch (err) { }
-  //   };
-  //   fetchData();
-  // }, [path, dispatch]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const videoRes = await axios.get(`/videos/find/${path}`);
+        const channelRes = await axios.get(`/users/find/${videoRes.data.userId}`);
+        setChannel(channelRes.data);
+        dispatch(fetchSuccess(videoRes.data));
+      } catch (err) { }
+    };
+    fetchData();
+  }, [path,dispatch]);
 
   return (
     <Container>
@@ -135,11 +130,11 @@ const Video = () => {
             allowfullscreen
           ></iframe>
         </VideoWrapper>
-        {/* <Title>{currentVideo.title}</Title> */}
+        <Title>{currentVideo?.title}</Title>
         <Details>
-          {/* <Info>{currentVideo.views} views • {format(currentVideo.createdAt)}</Info> */}
+          <Info>{currentVideo?.views} views • {format(currentVideo?.createdAt)}</Info>
           <Buttons>
-            {/* <Button><ThumbUpOutlined />{currentVideo.likes?.length}</Button> */}
+            <Button><ThumbUpOutlined />{currentVideo?.likes?.length}</Button>
             <Button><ThumbDownOffAltOutlined />Dislike</Button>
             <Button><ReplyOutlined />Share</Button>
             <Button><AddTaskOutlined />Save</Button>
@@ -148,11 +143,11 @@ const Video = () => {
         <Hr />
         <Channel>
           <ChannelInfo>
-            {/* <Image src={channel.img} /> */}
+            <Image src={channel.img} />
             <ChannelDetail>
-              {/* <ChannelName>{channel.name}</ChannelName>
+              <ChannelName>{channel.name}</ChannelName>
               <ChannelCounter>{channel.subscribers} Subscribers</ChannelCounter>
-              <Description>{currentVideo.desc}</Description> */}
+              <Description>{currentVideo?.desc}</Description>
             </ChannelDetail>
           </ChannelInfo>
           <Subcribe>Subscribe</Subcribe>
