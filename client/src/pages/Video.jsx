@@ -1,8 +1,14 @@
 import { AddTaskOutlined, ReplyOutlined, ThumbDownOffAltOutlined, ThumbUpOutlined } from '@mui/icons-material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Comments from '../components/Comments'
 import Card from "../components/Card"
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { dislike, fetchSuccess, like } from "../redux/videoSlice";
+import { format } from "timeago.js";
+import { subscription } from "../redux/userSlice";
 
 const Container = styled.div`
   display: flex;
@@ -90,6 +96,31 @@ const Subcribe = styled.button`
 `
 
 const Video = () => {
+  const { currentUser } = useSelector((state) => state.user);
+  // const { currentVideo } = useSelector((state) => state.video);
+  const dispatch = useDispatch();
+
+  const path = useLocation()
+
+  console.log(path)
+  //.pathname.split("/")[2]
+
+  // const [channel, setChannel] = useState({});
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const videoRes = await axios.get(`/videos/find/${path}`);
+  //       const channelRes = await axios.get(
+  //         `/users/find/${videoRes.data.userId}`
+  //       );
+  //       setChannel(channelRes.data);
+  //       dispatch(fetchSuccess(videoRes.data));
+  //     } catch (err) { }
+  //   };
+  //   fetchData();
+  // }, [path, dispatch]);
+
   return (
     <Container>
       <Content>
@@ -104,24 +135,24 @@ const Video = () => {
             allowfullscreen
           ></iframe>
         </VideoWrapper>
-        <Title>Test Video</Title>
+        {/* <Title>{currentVideo.title}</Title> */}
         <Details>
-          <Info>7,948,154 views • Jun 22, 2022</Info>
+          {/* <Info>{currentVideo.views} views • {format(currentVideo.createdAt)}</Info> */}
           <Buttons>
-            <Button><ThumbUpOutlined />123</Button>
+            {/* <Button><ThumbUpOutlined />{currentVideo.likes?.length}</Button> */}
             <Button><ThumbDownOffAltOutlined />Dislike</Button>
-            <Button><ReplyOutlined/>Share</Button>
+            <Button><ReplyOutlined />Share</Button>
             <Button><AddTaskOutlined />Save</Button>
           </Buttons>
         </Details>
         <Hr />
         <Channel>
           <ChannelInfo>
-            <Image src='https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg' />
+            {/* <Image src={channel.img} /> */}
             <ChannelDetail>
-              <ChannelName>Test Dev</ChannelName>
-              <ChannelCounter>200k Subscribers</ChannelCounter>
-              <Description>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat itaque tenetur ex temporibus, dicta voluptate hic nam rerum ratione voluptatem quaerat esse voluptates sint velit reiciendis consectetur minus aliquid enim?</Description>
+              {/* <ChannelName>{channel.name}</ChannelName>
+              <ChannelCounter>{channel.subscribers} Subscribers</ChannelCounter>
+              <Description>{currentVideo.desc}</Description> */}
             </ChannelDetail>
           </ChannelInfo>
           <Subcribe>Subscribe</Subcribe>
@@ -129,7 +160,7 @@ const Video = () => {
         <Hr />
         <Comments />
       </Content>
-      <Recommendation>
+      {/* <Recommendation>
         <Card type="sm"/>
         <Card type="sm"/>
         <Card type="sm"/>
@@ -144,7 +175,7 @@ const Video = () => {
         <Card type="sm"/>
         <Card type="sm"/>
         <Card type="sm"/>
-      </Recommendation>
+      </Recommendation> */}
     </Container>
   )
 }
